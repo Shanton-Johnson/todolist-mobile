@@ -1,15 +1,52 @@
-// app/(tabs)/index.tsx
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { AddTaskModal } from '@/components/AddTaskModal';
+import { Colors } from '@/constants/Colors';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function AddScreen() {
+  const [visible, setVisible] = useState(false);
+
+  const handleAddTask = (task: {
+    title: string;
+    description: string;
+    date: Date | null;
+    priority: number | null;
+  }) => {
+    console.log('New task:', task);
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Add Tab</Text>
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={() => setVisible(true)}
+      >
+        <Ionicons name="add" size={32} color="#fff" />
+      </TouchableOpacity>
+
+      <AddTaskModal
+        visible={visible}
+        onClose={() => setVisible(false)}
+        onSubmit={handleAddTask}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' },
-  text: { color: 'white', fontSize: 20 },
+  container: {
+    flex: 1,
+    backgroundColor: Colors.background,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  addButton: {
+    backgroundColor: Colors.primary,
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
