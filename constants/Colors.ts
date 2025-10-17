@@ -1,6 +1,8 @@
 export const Colors = {
-  primary: '#8b5cf6',
-  background: '#1a1a1a',
-  inactive: '#ccc',
+  primary: '#7B61FF',
+  background: '#121212',
+  inactive: '#666',
   text: '#fff',
+  card: '#1E1E1E',
+  input: '#2A2A2A',
 };
