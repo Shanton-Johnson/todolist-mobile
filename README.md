@@ -76,3 +76,11 @@ Distributed under the XYZ license. See ``LICENSE`` for more information.
 [travis-image]: https://img.shields.io/travis/dbader/node-datadog-metrics/master.svg?style=flat-square
 [travis-url]: https://travis-ci.org/dbader/node-datadog-metrics
 [wiki]: https://github.com/yourname/yourproject/wiki
+
+## 🧭 Figma Prototype
+
+<p align="center">
+  <a href="https://www.figma.com/proto/Um6fT0c1UOpDWKbIptdit1/UpTodo---Todo-list-app-UI-Kit--Community-?node-id=2-12143&t=nRP2d5Z4NTZ8lH6J-1" target="_blank">
+    <img src="./assets/images/prototype-preview.png" alt="Figma Prototype Preview" width="600"/>
+  </a>
+</p>
