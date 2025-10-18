@@ -78,9 +78,10 @@ Distributed under the XYZ license. See ``LICENSE`` for more information.
 [wiki]: https://github.com/yourname/yourproject/wiki
 
 ## 🧭 Figma Prototype
+#### <sub><em>💡 Tip: Right-click the image and select “Open link in new tab” to view the prototype.</em></sub>
 
 <p align="center">
-  <a href="https://www.figma.com/proto/Um6fT0c1UOpDWKbIptdit1/UpTodo---Todo-list-app-UI-Kit--Community-?node-id=2-12143&t=nRP2d5Z4NTZ8lH6J-1" target="_blank">
+  <a href="https://www.figma.com/proto/Um6fT0c1UOpDWKbIptdit1/UpTodo---Todo-list-app-UI-Kit--Community-?node-id=2-12143&t=nRP2d5Z4NTZ8lH6J-1" rel="noopener noreferrer">
     <img src="./assets/images/prototype-preview.png" alt="Figma Prototype Preview" width="600"/>
   </a>
 </p>
