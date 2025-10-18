@@ -1,28 +1,17 @@
+import React, { useState } from 'react';
+import { TouchableOpacity, StyleSheet } from 'react-native';
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { TouchableOpacity, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useState } from 'react';
 import { Colors } from '@/constants/Colors';
-import { AddTaskModal } from '@/components/AddTaskModal';
+import { AddTaskModal } from '../../components/AddTaskModal';
 
 export default function TabsLayout() {
   const insets = useSafeAreaInsets();
   const [isModalVisible, setModalVisible] = useState(false);
 
-  const handleAddTask = (task: {
-    title: string;
-    description: string;
-    date: Date | null;
-    priority: number | null;
-  }) => {
-    console.log('New task added:', task);
-    // You can later connect this to a global task store (Zustand/Context)
-  };
-
   return (
     <>
-      {/* ---- Tabs ---- */}
       <Tabs
         screenOptions={{
           headerShown: false,
@@ -103,12 +92,7 @@ export default function TabsLayout() {
         />
       </Tabs>
 
-      {/* ---- Add Task Modal ---- */}
-      <AddTaskModal
-        visible={isModalVisible}
-        onClose={() => setModalVisible(false)}
-        onSubmit={handleAddTask}
-      />
+      <AddTaskModal visible={isModalVisible} onClose={() => setModalVisible(false)} />
     </>
   );
 }

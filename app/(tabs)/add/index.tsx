@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+
 import { AddTaskModal } from '@/components/AddTaskModal';
 import { Colors } from '@/constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
+import React, { useState } from 'react';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 export default function AddScreen() {
   const [visible, setVisible] = useState(false);
@@ -28,7 +29,6 @@ export default function AddScreen() {
       <AddTaskModal
         visible={visible}
         onClose={() => setVisible(false)}
-        onSubmit={handleAddTask}
       />
     </View>
   );

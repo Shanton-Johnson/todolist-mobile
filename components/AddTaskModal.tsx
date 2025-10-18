@@ -11,23 +11,19 @@ import { Ionicons } from '@expo/vector-icons';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { BlurView } from 'expo-blur';
 import { Colors } from '@/constants/Colors';
+import { useTaskStore } from '../stores/taskStore';
 
 type AddTaskModalProps = {
   visible: boolean;
   onClose: () => void;
-  onSubmit: (task: {
-    title: string;
-    description: string;
-    date: Date | null;
-    priority: number | null;
-  }) => void;
 };
 
 export const AddTaskModal: React.FC<AddTaskModalProps> = ({
   visible,
   onClose,
-  onSubmit,
 }) => {
+  const addTask = useTaskStore((state) => state.addTask);
+
   const [taskTitle, setTaskTitle] = useState('');
   const [description, setDescription] = useState('');
   const [selectedPriority, setSelectedPriority] = useState<number | null>(null);
@@ -44,12 +40,15 @@ export const AddTaskModal: React.FC<AddTaskModalProps> = ({
   }, [visible]);
 
   const handleAdd = () => {
-    onSubmit({
+    if (!taskTitle.trim()) return;
+
+    addTask({
       title: taskTitle.trim(),
       description: description.trim(),
       date: selectedDate,
       priority: selectedPriority,
     });
+
     setTaskTitle('');
     setDescription('');
     setSelectedDate(null);
@@ -59,7 +58,6 @@ export const AddTaskModal: React.FC<AddTaskModalProps> = ({
 
   return (
     <>
-      {/* ---- Add Task Modal ---- */}
       <Modal
         isVisible={visible}
         onBackdropPress={onClose}
@@ -119,11 +117,10 @@ export const AddTaskModal: React.FC<AddTaskModalProps> = ({
         </View>
       </Modal>
 
-      {/* ---- DateTime Picker ---- */}
       <DateTimePickerModal
         isVisible={isDatePickerVisible}
         mode="datetime"
-        onConfirm={(date) => {
+        onConfirm={(date: any) => {
           setSelectedDate(date);
           setDatePickerVisible(false);
         }}
@@ -132,7 +129,6 @@ export const AddTaskModal: React.FC<AddTaskModalProps> = ({
         accentColor={Colors.primary}
       />
 
-      {/* ---- Priority Picker ---- */}
       <Modal
         isVisible={isPriorityVisible}
         onBackdropPress={() => setPriorityVisible(false)}
@@ -270,3 +266,6 @@ const styles = StyleSheet.create({
   },
   saveText: { color: '#fff', fontWeight: '500' },
 });
+
+// default export to satisfy Expo Router warning
+export default AddTaskModal;

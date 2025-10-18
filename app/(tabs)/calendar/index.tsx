@@ -1,167 +1,275 @@
 // app/(tabs)/calendar/index.tsx
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  FlatList,
+  StyleSheet,
+  Image,
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Colors } from '@/constants/Colors';
 
 export default function CalendarScreen() {
+  const [selectedTab, setSelectedTab] = useState<'today' | 'completed'>('today');
+  const [selectedDate, setSelectedDate] = useState<number>(9);
+
+  const days = [
+    { day: 'SUN', date: 6 },
+    { day: 'MON', date: 7 },
+    { day: 'TUE', date: 8 },
+    { day: 'WED', date: 9 },
+    { day: 'THU', date: 10 },
+    { day: 'FRI', date: 11 },
+    { day: 'SAT', date: 12 },
+  ];
+
+  const tasks = [
+    {
+      id: '1',
+      title: 'Do Math Homework',
+      time: 'Today At 16:45',
+      category: 'University',
+      categoryColor: '#4F6EF7',
+      priority: 1,
+    },
+    {
+      id: '2',
+      title: 'Tack out dogs',
+      time: 'Today At 18:20',
+      category: 'Home',
+      categoryColor: '#F77B72',
+      priority: 2,
+    },
+    {
+      id: '3',
+      title: 'Business meeting with CEO',
+      time: 'Today At 08:15',
+      category: 'Work',
+      categoryColor: '#F7C84F',
+      priority: 3,
+    },
+  ];
+
   return (
-    <View style={styles.container}>
-      {/* Header */}
+    <SafeAreaView style={styles.container} edges={['top']}>
+      {/* ---------- HEADER ---------- */}
       <View style={styles.header}>
         <TouchableOpacity>
-          <Ionicons name="filter-outline" size={24} color="white" />
+          <Ionicons name="filter-outline" size={22} color="#fff" />
         </TouchableOpacity>
+
         <Text style={styles.headerTitle}>Calendar</Text>
+
         <TouchableOpacity>
-          <Ionicons name="person-circle-outline" size={28} color="white" />
+          <Image
+            source={{
+              uri: 'https://cdn-icons-png.flaticon.com/512/847/847969.png',
+            }}
+            style={styles.profileImage}
+          />
         </TouchableOpacity>
       </View>
 
-      {/* Month Selector */}
+      {/* ---------- MONTH NAV ---------- */}
       <View style={styles.monthRow}>
         <TouchableOpacity>
-          <Ionicons name="chevron-back" size={20} color="white" />
+          <Ionicons name="chevron-back" size={18} color="#fff" />
         </TouchableOpacity>
         <View>
           <Text style={styles.monthText}>FEBRUARY</Text>
           <Text style={styles.yearText}>2022</Text>
         </View>
         <TouchableOpacity>
-          <Ionicons name="chevron-forward" size={20} color="white" />
+          <Ionicons name="chevron-forward" size={18} color="#fff" />
         </TouchableOpacity>
       </View>
 
-      {/* Days of the week */}
-      <View style={styles.daysRow}>
-        {['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].map((day, i) => (
-          <TouchableOpacity key={i} style={[styles.dayContainer, day === 'WED' && styles.activeDay]}>
+      {/* ---------- WEEK DAYS ---------- */}
+      <View style={styles.weekRow}>
+        {days.map((d) => (
+          <TouchableOpacity
+            key={d.date}
+            style={[
+              styles.dayContainer,
+              selectedDate === d.date && styles.selectedDay,
+            ]}
+            onPress={() => setSelectedDate(d.date)}
+          >
             <Text
               style={[
-                styles.dayText,
-                day === 'SUN' && styles.sunday,
-                day === 'SAT' && styles.saturday,
-                day === 'WED' && styles.activeDayText,
+                styles.dayLabel,
+                d.day === 'SUN' ? { color: '#F77B72' } : {},
               ]}
             >
-              {day}
+              {d.day}
             </Text>
-            <Text style={[styles.dateText, day === 'WED' && styles.activeDateText]}>{6 + i}</Text>
+            <Text
+              style={[
+                styles.dateLabel,
+                selectedDate === d.date && { color: Colors.primary },
+              ]}
+            >
+              {d.date}
+            </Text>
           </TouchableOpacity>
         ))}
       </View>
 
-      {/* Today / Completed Buttons */}
-      <View style={styles.filterRow}>
-        <TouchableOpacity style={[styles.filterButton, styles.activeFilter]}>
-          <Text style={styles.filterTextActive}>Today</Text>
+      {/* ---------- TOGGLE BUTTONS ---------- */}
+      <View style={styles.toggleContainer}>
+        <TouchableOpacity
+          style={[
+            styles.toggleButton,
+            selectedTab === 'today' && styles.activeToggle,
+          ]}
+          onPress={() => setSelectedTab('today')}
+        >
+          <Text
+            style={[
+              styles.toggleText,
+              selectedTab === 'today' && styles.activeToggleText,
+            ]}
+          >
+            Today
+          </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.filterButton}>
-          <Text style={styles.filterText}>Completed</Text>
+
+        <TouchableOpacity
+          style={[
+            styles.toggleButton,
+            selectedTab === 'completed' && styles.activeToggle,
+          ]}
+          onPress={() => setSelectedTab('completed')}
+        >
+          <Text
+            style={[
+              styles.toggleText,
+              selectedTab === 'completed' && styles.activeToggleText,
+            ]}
+          >
+            Completed
+          </Text>
         </TouchableOpacity>
       </View>
 
-      {/* Task List */}
-      <ScrollView style={styles.tasksContainer}>
-        {[
-          { title: 'Do Math Homework', time: 'Today At 16:45', label: 'University', color: '#6A5AE0', id: 1 },
-          { title: 'Tack out dogs', time: 'Today At 18:20', label: 'Home', color: '#F06263', id: 2 },
-          { title: 'Business meeting with CEO', time: 'Today At 08:15', label: 'Work', color: '#F2B75A', id: 3 },
-        ].map(task => (
-          <View key={task.id} style={styles.taskCard}>
-            <Ionicons name="ellipse-outline" size={20} color="#aaa" />
+      {/* ---------- TASK LIST ---------- */}
+      <FlatList
+        data={tasks}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={{ paddingBottom: 100 }}
+        renderItem={({ item }) => (
+          <View style={styles.taskCard}>
+            <TouchableOpacity>
+              <Ionicons name="ellipse-outline" size={20} color="#fff" />
+            </TouchableOpacity>
             <View style={{ flex: 1, marginLeft: 10 }}>
-              <Text style={styles.taskTitle}>{task.title}</Text>
-              <Text style={styles.taskTime}>{task.time}</Text>
+              <Text style={styles.taskTitle}>{item.title}</Text>
+              <Text style={styles.taskTime}>{item.time}</Text>
             </View>
-            <View style={[styles.labelTag, { backgroundColor: task.color + '33' }]}>
-              <Text style={[styles.labelText, { color: task.color }]}>{task.label}</Text>
+
+            <View style={[styles.categoryTag, { backgroundColor: item.categoryColor + '22' }]}>
+              <Text style={[styles.categoryText, { color: item.categoryColor }]}>
+                {item.category}
+              </Text>
             </View>
-            <View style={styles.taskId}>
-              <MaterialIcons name="flag" size={14} color="#aaa" />
-              <Text style={styles.taskIdText}>{task.id}</Text>
+
+            <View style={styles.priorityTag}>
+              <Ionicons name="flag-outline" size={12} color="#aaa" />
+              <Text style={styles.priorityText}>{item.priority}</Text>
             </View>
           </View>
-        ))}
-      </ScrollView>
-    </View>
+        )}
+      />
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#111', paddingTop: 50, paddingHorizontal: 16 },
+  container: { flex: 1, backgroundColor: Colors.background },
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 16,
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    marginTop: 5,
   },
-  headerTitle: { color: 'white', fontSize: 20, fontWeight: '600' },
+  headerTitle: { color: '#fff', fontSize: 18, fontWeight: '600' },
+  profileImage: { width: 30, height: 30, borderRadius: 15 },
 
   monthRow: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    marginVertical: 10,
     gap: 10,
-    marginBottom: 12,
   },
-  monthText: { color: 'white', fontSize: 14, textAlign: 'center' },
-  yearText: { color: '#aaa', fontSize: 12, textAlign: 'center' },
+  monthText: { color: '#fff', fontWeight: '600', textAlign: 'center' },
+  yearText: { color: '#888', fontSize: 12, textAlign: 'center' },
 
-  daysRow: {
+  weekRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 20,
+    justifyContent: 'space-around',
+    marginHorizontal: 10,
+    backgroundColor: Colors.card,
+    borderRadius: 12,
+    paddingVertical: 8,
   },
-  dayContainer: {
-    alignItems: 'center',
-    paddingVertical: 6,
-    width: 40,
-    borderRadius: 10,
-  },
-  dayText: { color: '#bbb', fontSize: 12, marginBottom: 4 },
-  dateText: { color: '#ccc', fontSize: 14 },
-  sunday: { color: '#F06263' },
-  saturday: { color: '#F06263' },
-  activeDay: { backgroundColor: '#2B2B2B' },
-  activeDayText: { color: '#fff' },
-  activeDateText: { color: '#6A5AE0', fontWeight: '700' },
-
-  filterRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    backgroundColor: '#222',
-    borderRadius: 10,
-    padding: 4,
-    marginBottom: 16,
-  },
-  filterButton: {
-    flex: 1,
-    paddingVertical: 10,
-    alignItems: 'center',
+  dayContainer: { alignItems: 'center', flex: 1, paddingVertical: 6 },
+  selectedDay: {
+    backgroundColor: Colors.input,
     borderRadius: 8,
   },
-  activeFilter: { backgroundColor: '#6A5AE0' },
-  filterText: { color: '#bbb' },
-  filterTextActive: { color: 'white', fontWeight: '600' },
+  dayLabel: { color: '#aaa', fontSize: 12 },
+  dateLabel: { color: '#fff', fontWeight: '600', marginTop: 3 },
 
-  tasksContainer: { flex: 1 },
+  toggleContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    marginTop: 15,
+    paddingHorizontal: 10,
+  },
+  toggleButton: {
+    flex: 1,
+    marginHorizontal: 8,
+    paddingVertical: 10,
+    borderRadius: 10,
+    backgroundColor: Colors.card,
+    alignItems: 'center',
+  },
+  activeToggle: {
+    backgroundColor: Colors.primary,
+  },
+  toggleText: { color: '#aaa', fontWeight: '500' },
+  activeToggleText: { color: '#fff' },
+
   taskCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1C1C1C',
-    padding: 14,
+    backgroundColor: Colors.card,
+    marginHorizontal: 15,
+    marginTop: 12,
     borderRadius: 12,
-    marginBottom: 10,
+    padding: 12,
   },
-  taskTitle: { color: 'white', fontSize: 16, marginBottom: 4 },
-  taskTime: { color: '#aaa', fontSize: 12 },
-  labelTag: {
+  taskTitle: { color: '#fff', fontWeight: '500', fontSize: 15 },
+  taskTime: { color: '#aaa', fontSize: 12, marginTop: 3 },
+  categoryTag: {
+    paddingHorizontal: 10,
     paddingVertical: 4,
-    paddingHorizontal: 8,
-    borderRadius: 8,
-    marginRight: 6,
+    borderRadius: 6,
+    marginRight: 8,
   },
-  labelText: { fontSize: 12, fontWeight: '600' },
-  taskId: { flexDirection: 'row', alignItems: 'center', gap: 2 },
-  taskIdText: { color: '#aaa', fontSize: 12 },
+  categoryText: { fontSize: 12, fontWeight: '500' },
+  priorityTag: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Colors.input,
+    paddingHorizontal: 6,
+    paddingVertical: 4,
+    borderRadius: 6,
+  },
+  priorityText: { color: '#aaa', fontSize: 12, marginLeft: 3 },
 });
