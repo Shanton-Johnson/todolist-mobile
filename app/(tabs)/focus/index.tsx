@@ -1,4 +1,4 @@
-// app/(tabs)/index.tsx
+// app/(tabs)/focus/index.tsx
 import { View, Text, StyleSheet } from 'react-native';
 
 export default function FocusScreen() {
