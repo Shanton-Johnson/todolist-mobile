@@ -85,3 +85,23 @@ Distributed under the XYZ license. See ``LICENSE`` for more information.
     <img src="./assets/images/prototype-preview.png" alt="Figma Prototype Preview" width="600"/>
   </a>
 </p>
+
+## 📝 Documentation
+#### <sub><em>💡 Tip: Right-click the button and select “Save link as…” if the file doesn’t download automatically.</em></sub>
+
+<p align="center">
+  <a href="https://github.com/Shanton-Johnson/todolist-mobile/raw/refs/heads/main/assets/files/document.docx" download="ToDoList-Documentation.docx">
+    <img src="https://img.shields.io/badge/Download%20Documentation-0078D4?style=for-the-badge&logo=microsoftword&logoColor=white" alt="Download Word Document">
+  </a>
+</p>
+
+---
+
+## 📊 Presentation
+#### <sub><em>💡 Tip: Right-click the button and select “Save link as…” if the file doesn’t download automatically.</em></sub>
+
+<p align="center">
+  <a href="https://github.com/Shanton-Johnson/todolist-mobile/raw/refs/heads/main/assets/files/presentation.pptx" download="ToDoList-Presentation.pptx">
+    <img src="https://img.shields.io/badge/Download%20Presentation-B7472A?style=for-the-badge&logo=microsoftpowerpoint&logoColor=white" alt="Download PowerPoint Presentation">
+  </a>
+</p>
