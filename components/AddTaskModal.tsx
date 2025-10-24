@@ -12,18 +12,27 @@ import { Ionicons } from '@expo/vector-icons';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { BlurView } from 'expo-blur';
 import { Colors } from '@/constants/Colors';
-import { useTaskStore } from '../stores/taskStore';
+import { useTaskStore } from '@/stores/taskStore';
 
 type AddTaskModalProps = {
   visible: boolean;
   onClose: () => void;
+  taskToEdit?: {
+    id: string;
+    title: string;
+    description: string;
+    date: Date | null;
+    priority: number | null;
+  } | null;
 };
 
 export const AddTaskModal: React.FC<AddTaskModalProps> = ({
   visible,
   onClose,
+  taskToEdit,
 }) => {
   const addTask = useTaskStore((state) => state.addTask);
+  const updateTask = useTaskStore((state) => state.updateTask);
 
   const [taskTitle, setTaskTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -35,25 +44,43 @@ export const AddTaskModal: React.FC<AddTaskModalProps> = ({
 
   useEffect(() => {
     if (visible) {
+      // prefill if editing
+      if (taskToEdit) {
+        setTaskTitle(taskToEdit.title);
+        setDescription(taskToEdit.description);
+        setSelectedPriority(taskToEdit.priority);
+        setSelectedDate(taskToEdit.date ? new Date(taskToEdit.date) : null);
+      } else {
+        setTaskTitle('');
+        setDescription('');
+        setSelectedPriority(null);
+        setSelectedDate(null);
+      }
+
       const timer = setTimeout(() => taskInputRef.current?.focus(), 300);
       return () => clearTimeout(timer);
     }
-  }, [visible]);
+  }, [visible, taskToEdit]);
 
-  const handleAdd = () => {
+  const handleSave = () => {
     if (!taskTitle.trim()) return;
 
-    addTask({
-      title: taskTitle.trim(),
-      description: description.trim(),
-      date: selectedDate,
-      priority: selectedPriority,
-    });
+    if (taskToEdit) {
+      updateTask(taskToEdit.id, {
+        title: taskTitle.trim(),
+        description: description.trim(),
+        date: selectedDate,
+        priority: selectedPriority,
+      });
+    } else {
+      addTask({
+        title: taskTitle.trim(),
+        description: description.trim(),
+        date: selectedDate,
+        priority: selectedPriority,
+      });
+    }
 
-    setTaskTitle('');
-    setDescription('');
-    setSelectedDate(null);
-    setSelectedPriority(null);
     onClose();
   };
 
@@ -72,7 +99,9 @@ export const AddTaskModal: React.FC<AddTaskModalProps> = ({
       >
         <View style={styles.modalContainer}>
           <View style={styles.swipeIndicator} />
-          <Text style={styles.modalTitle}>Add Task</Text>
+          <Text style={styles.modalTitle}>
+            {taskToEdit ? 'Edit Task' : 'Add Task'}
+          </Text>
 
           <TextInput
             ref={taskInputRef}
@@ -110,9 +139,9 @@ export const AddTaskModal: React.FC<AddTaskModalProps> = ({
                 { opacity: taskTitle.trim() ? 1 : 0.5 },
               ]}
               disabled={!taskTitle.trim()}
-              onPress={handleAdd}
+              onPress={handleSave}
             >
-              <Ionicons name="arrow-up-outline" size={22} color="#fff" />
+              <Ionicons name="checkmark-outline" size={22} color="#fff" />
             </TouchableOpacity>
           </View>
         </View>
@@ -223,10 +252,7 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     padding: 10,
   },
-  smallModal: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+  smallModal: { justifyContent: 'center', alignItems: 'center' },
   priorityContainer: {
     width: 300,
     backgroundColor: Colors.card,
@@ -268,5 +294,4 @@ const styles = StyleSheet.create({
   saveText: { color: '#fff', fontWeight: '500' },
 });
 
-// default export to satisfy Expo Router warning
 export default AddTaskModal;

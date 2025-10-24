@@ -1,4 +1,3 @@
-// constants/Colors.tsx
 export const Colors = {
   primary: '#7B61FF',
   background: '#121212',

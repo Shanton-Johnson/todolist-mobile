@@ -1,11 +1,10 @@
-// app/(tabs)/_layout.tsx
 import React, { useState } from 'react';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Colors } from '@/constants/Colors';
-import { AddTaskModal } from '../../components/AddTaskModal';
+import { AddTaskModal } from '@/components/AddTaskModal';
 
 export default function TabsLayout() {
   const insets = useSafeAreaInsets();
@@ -28,6 +27,7 @@ export default function TabsLayout() {
         <Tabs.Screen
           name="index"
           options={{
+            title: 'Home',
             tabBarIcon: ({ focused }) => (
               <Ionicons
                 name={focused ? 'home' : 'home-outline'}
@@ -41,6 +41,7 @@ export default function TabsLayout() {
         <Tabs.Screen
           name="calendar/index"
           options={{
+            title: 'Calendar',
             tabBarIcon: ({ focused }) => (
               <Ionicons
                 name={focused ? 'calendar' : 'calendar-outline'}
@@ -51,6 +52,7 @@ export default function TabsLayout() {
           }}
         />
 
+        {/* Custom Floating + Button */}
         <Tabs.Screen
           name="add/index"
           options={{
@@ -69,6 +71,7 @@ export default function TabsLayout() {
         <Tabs.Screen
           name="focus/index"
           options={{
+            title: 'Focus',
             tabBarIcon: ({ focused }) => (
               <Ionicons
                 name={focused ? 'timer' : 'timer-outline'}
@@ -82,6 +85,7 @@ export default function TabsLayout() {
         <Tabs.Screen
           name="profile/index"
           options={{
+            title: 'Profile',
             tabBarIcon: ({ focused }) => (
               <Ionicons
                 name={focused ? 'person' : 'person-outline'}
@@ -93,7 +97,11 @@ export default function TabsLayout() {
         />
       </Tabs>
 
-      <AddTaskModal visible={isModalVisible} onClose={() => setModalVisible(false)} />
+      {/* Add Task Modal */}
+      <AddTaskModal
+        visible={isModalVisible}
+        onClose={() => setModalVisible(false)}
+      />
     </>
   );
 }

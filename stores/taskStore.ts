@@ -1,5 +1,7 @@
-// stores/taskStores.ts
+// stores/taskStore.ts
 import { create } from 'zustand';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
 export interface Task {
   id: string;
@@ -12,24 +14,38 @@ export interface Task {
 interface TaskStore {
   tasks: Task[];
   addTask: (task: Omit<Task, 'id'>) => void;
+  updateTask: (id: string, updated: Partial<Task>) => void;
   removeTask: (id: string) => void;
   clearTasks: () => void;
 }
 
-export const useTaskStore = create<TaskStore>((set) => ({
-  tasks: [],
+export const useTaskStore = create<TaskStore>()(
+  persist(
+    (set) => ({
+      tasks: [],
 
-  addTask: (task) =>
-    set((state) => ({
-      tasks: [...state.tasks, { ...task, id: Date.now().toString() }],
-    })),
+      addTask: (task) =>
+        set((state) => ({
+          tasks: [...state.tasks, { ...task, id: Date.now().toString() }],
+        })),
 
-  removeTask: (id) =>
-    set((state) => ({
-      tasks: state.tasks.filter((task) => task.id !== id),
-    })),
+      updateTask: (id, updated) =>
+        set((state) => ({
+          tasks: state.tasks.map((task) =>
+            task.id === id ? { ...task, ...updated } : task
+          ),
+        })),
 
-  clearTasks: () => set({ tasks: [] }),
-}));
+      removeTask: (id) =>
+        set((state) => ({
+          tasks: state.tasks.filter((task) => task.id !== id),
+        })),
 
-export default null; // or export default {} if you prefer
+      clearTasks: () => set({ tasks: [] }),
+    }),
+    {
+      name: 'task-storage',
+      storage: createJSONStorage(() => AsyncStorage),
+    }
+  )
+);
